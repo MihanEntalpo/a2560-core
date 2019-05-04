@@ -12,8 +12,7 @@ class DummyPort
     void println() {}
     void println(const char* s) {}
     void println(int s) {}
-  
-    
+    DummyPort::println(String&) {}
 };
 
 #endif

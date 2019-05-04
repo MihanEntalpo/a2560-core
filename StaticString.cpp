@@ -50,6 +50,10 @@ bool StaticString<B>::append(char *s, int size)
 template <int B>
 void StaticString<B>::clear()
 {
+  for (int i=0; i< this->max_size; i++)
+  {
+    this->buffer[i] = '\0';
+  }
   this->size = 0;
 }
 

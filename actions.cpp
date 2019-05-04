@@ -3,54 +3,48 @@
 
 #include "actions.h"
 
-void action_help(char *command, AbstractStaticString *full_command, AbstractStaticString *params, unsigned int paramsCount)
+class Commandor;
+
+void action_help(char* command, Commandor* cmd)
 {
-  Serial.println("*************");
-  Serial.println("* Help info *");
-  Serial.println("*************");
-  Serial.print  (" Params passed to Help: ");
-  
-  for (int p = 0; p < paramsCount; p ++)
+  Serial.println(F("*************"));
+  Serial.println(F("* Help info *"));
+  Serial.println(F("*************"));
+  Serial.println(F("Commands:"));
+  for (int i=0; i< cmd->command_count; i++)
   {
-    Serial.print(" [");
-    Serial.print(p);
-    Serial.print(",");
-    Serial.print((int)(params + p), HEX);
-    Serial.print(",");
+    Serial.print("Name: `");
+    Serial.print(cmd->command_items[i]->name));
+    Serial.print("`\n");
+    Serial.println("Description:");
     
-    Serial.print("] `");
-    Serial.print(p == 0 ? params[p].getBuffer() : "unknown");
-    Serial.print("`");
-    if (p + 1 < paramsCount)
-    {
-      Serial.print(", ");
-    }
   }
-
-  Serial.println();
 }
-  
-void action_help_d(char* command, Commandor* cmd)
-{
-  Serial.println("*********************");
-  Serial.println("* Help info DYNAMIC *");
-  Serial.println("*********************");
 
+void action_test_params(char* command, Commandor* cmd)
+{
+  Serial.println(F("***************************************"));
+  Serial.println(F("* Test of command and params parsing: *"));
+  Serial.println(F("***************************************"));
+
+  Serial.println(F("Your command string:\n```\n"));
+  Serial.println(cmd->cmdBuf.getBuffer());
+  Serial.println(F("```"));
+  
+  Serial.print(F("\nCommand: "));
+  Serial.println(command);
+
+  Serial.print(F("\nParameters count: "));
+  Serial.println(cmd->cmdParamsCount);
+
+  Serial.println(F("Parameters:"));
+  
   for (int p = 0; p < cmd->cmdParamsCount; p ++)
   {
-    Serial.print(" [");
-    Serial.print(p);
-    Serial.print(",");
-    Serial.print((int)&(cmd->cmdParams[p]), HEX);
-    Serial.print(",");
-    Serial.print((int)&(cmd->cmdParams + p), HEX);
-    Serial.print("] `");
+    Serial.print(p+1);
+    Serial.print(F(") `"));
     Serial.print(cmd->cmdParams[p].getBuffer());
-    Serial.print("`");
-    if (p + 1 < paramsCount)
-    {
-      Serial.print(", ");
-    }
+    Serial.println(F("`"));    
   }
 
   Serial.println();

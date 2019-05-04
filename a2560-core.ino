@@ -4,37 +4,25 @@
 
 Commandor commandor;
 
-/**
- * Определения функций из actions.h
- */
-void action_help(char* command, AbstractStaticString* full_command, AbstractStaticString *params, unsigned int paramsCount);
-void action_help_d(char* command, Commandor* cmd);
-
 /********************************************************\
  * Инициализация комманд в модуле Commander
  */
 
-// Количество команд
-int Commandor::commands = 1;
-
-// Список имён команд
-String Commandor::command_names[] = {"help"};
-// Декларация списка функций
-command_action Commandor::command_actions[MAX_COMMANDS];
 
 // Задаём список функций и запускаем инициализацию коммандера
 void init_commandor_actions()
 {
-  // Задаём функции
-  Commandor::command_actions[0] = &action_help;
-
   // Задаём инициализацию
-  Commandor::init();
-
-  commandor.command_count = 1;
+  commandor.command_count = 2;
   commandor.command_items[0] = {
-    "help",
-    action_help_d
+    F("help"),
+    F("Display this help"),
+    action_help
+  };
+  commandor.command_items[1] = {
+    F("test_params"),
+    F("Show, how parameters are parsed\nTakes all parameters and outputs it"),
+    action_test_params
   };
 }
 
@@ -50,11 +38,11 @@ void setup() {
   Serial.begin(115200);
   last_millis = millis();
 
-  Serial.println("Starting...");
+  Serial.println(F("Starting..."));
 
   init_commandor_actions();
 
-  Serial.println("Enter <command> or other data");
+  Serial.println(F("Enter <command> or other data"));
   
 }
 
